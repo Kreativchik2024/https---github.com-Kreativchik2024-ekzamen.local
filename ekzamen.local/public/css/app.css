@@ -1,0 +1,46 @@
+/* public/css/app.css */
+body {
+    background: #f4f6f9;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.main-card {
+    border: none;
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: #ffffff;
+}
+.main-card:hover {
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+.sidebar .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sidebar .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.1) !important;
+}
+footer a {
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+footer a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+h1, h2, h3, h4, .card-title {
+    font-weight: 600;
+}
+.breadcrumb-area {
+    background: transparent;
+    margin-bottom: 1.5rem;
+}
+@media (max-width: 768px) {
+    .main-card {
+        border-radius: 1rem;
+    }
+}
