@@ -9,3 +9,7 @@ Route::get('/', [PostController::class, 'index'])->name('home');
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

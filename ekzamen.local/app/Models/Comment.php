@@ -14,7 +14,8 @@ class Comment extends Model
      */
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        // Указываем, что внешний ключ — 'post_id', а локальный ключ — 'post_id' в таблице posts
+    return $this->belongsTo(Post::class, 'post_id', 'post_id');
     }
 
     /**
@@ -38,8 +39,5 @@ class Comment extends Model
      * Связь "принадлежит" с родительским комментарием.
      * Здесь $this->parent_id совпадает с id в родительском комментарии.
      */
-    public function parent()
-    {
-        return $this->belongsTo(Comment::class, 'parent_id', 'id');
+ 
     }
-}

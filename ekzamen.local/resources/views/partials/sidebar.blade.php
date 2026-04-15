@@ -1,23 +1,17 @@
 <div class="sidebar">
-    <!-- Первая карточка (например, для аватара или рекламы) -->
-    <div class="card shadow-sm mb-4 border-0 rounded-4 overflow-hidden">
-        <div class="card-body text-center bg-light">
-            <i class="bi bi-person-circle fs-1 text-muted"></i>
-            <h6 class="mt-2">Добро пожаловать!</h6>
-            <p class="small text-muted mb-0">Блог о веб-разработке</p>
-        </div>
-    </div>
 
-    <!-- Карточка: Последние посты -->
+
+    <!-- Виджет: Последние посты -->
     <div class="card shadow-sm mb-4 border-0 rounded-4">
         <div class="card-body">
             <h5 class="card-title mb-3">
-                <i class="bi bi-clock-history text-primary me-2"></i>Последние посты
+                <i class="bi bi-clock-history text-primary me-2"></i>Последние записи
             </h5>
             <ul class="list-unstyled mb-0">
                 @forelse($recentPosts ?? [] as $post)
                     <li class="mb-3 pb-2 border-bottom">
-                        <a href="" class="text-decoration-none fw-semibold d-block mb-1">
+                        {{-- Ссылка на пост – используем $post (Laravel сам возьмёт post_id) --}}
+                        <a href="{{ route('posts.show', $post) }}" class="text-decoration-none fw-semibold d-block mb-1">
                             {{ $post->title }}
                         </a>
                         <small class="text-muted">
@@ -25,19 +19,27 @@
                         </small>
                     </li>
                 @empty
-                    <li class="text-muted">Пока нет постов</li>
+                    <li class="text-muted">Нет постов</li>
                 @endforelse
             </ul>
         </div>
     </div>
 
-    <!-- Третья карточка (например, для цитаты или баннера) -->
-    <div class="card shadow-sm border-0 rounded-4 bg-dark text-white text-center">
+    <!-- Виджет: Категории (если есть) – пример -->
+    @if(isset($categories) && $categories->count())
+    <div class="card shadow-sm mb-4 border-0 rounded-4">
         <div class="card-body">
-            <i class="bi bi-quote fs-1"></i>
-            <p class="small mt-2">«Место для рекламы»</p>
-            <hr class="my-2 bg-white">
-            <small class="opacity-75">@php echo date('Y'); @endphp</small>
+            <h5 class="card-title mb-3">
+                <i class="bi bi-tags text-primary me-2"></i>Категории
+            </h5>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach($categories as $category)
+                    <a href="{{ route('categories.show', $category) }}" class="badge bg-light text-dark text-decoration-none px-3 py-2 rounded-pill">
+                        {{ $category->name }} ({{ $category->posts_count ?? 0 }})
+                    </a>
+                @endforeach
+            </div>
         </div>
     </div>
+    @endif
 </div>

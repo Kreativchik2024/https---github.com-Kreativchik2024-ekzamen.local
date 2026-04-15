@@ -27,8 +27,20 @@ class Post extends Model
         'remember_token'
     ];
     // Связь "один ко многим" с комментариями
-public function comments() {
-    return $this->hasMany(Comment::class);
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
 }
+public function comments()
+{
+    // Указываем, что внешний ключ в таблице comments называется 'post_id'
+    return $this->hasMany(Comment::class, 'post_id');
+}
+
+
+
+
+
 
 }
