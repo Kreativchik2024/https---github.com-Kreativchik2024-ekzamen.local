@@ -1,46 +1,175 @@
 /* public/css/app.css */
+
+/* Базовые стили */
 body {
-    background: #f4f6f9;
-    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    color: #1e293b;
 }
+
+/* Стеклянная карточка (основной контент) */
+.main-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 2rem !important;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.main-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 35px 55px rgba(0, 0, 0, 0.15);
+}
+
+/* Карточки постов (в списке) */
+.post-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.post-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+/* Сайдбар */
+.sidebar .card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem !important;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sidebar .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Кнопки */
+.btn-primary {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 2rem !important;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    background: linear-gradient(90deg, #5a67d8 0%, #6b46a0 100%);
+    color: white;
+}
+
+.btn-outline-primary {
+    border-radius: 2rem !important;
+    border-color: #667eea;
+    color: #667eea;
+    transition: all 0.3s;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* Навигация (хедер) */
+.navbar {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .navbar-brand {
     font-weight: 700;
     letter-spacing: 1px;
 }
-.main-card {
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #a78bfa;
+}
+
+/* Футер */
+footer {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Пагинация */
+.pagination .page-link {
+    background: rgba(255, 255, 255, 0.8);
     border: none;
-    border-radius: 1.25rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background: #ffffff;
+    color: #667eea;
+    border-radius: 0.75rem !important;
+    margin: 0 4px;
+    transition: all 0.2s;
 }
-.main-card:hover {
-    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+
+.pagination .page-link:hover {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateY(-2px);
 }
-.sidebar .card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+.pagination .active .page-link {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: white;
 }
-.sidebar .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.1) !important;
-}
-footer a {
+
+/* Ссылки */
+a {
+    color: #667eea;
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
 }
-footer a:hover {
-    opacity: 0.8;
-    text-decoration: underline;
+
+a:hover {
+    color: #764ba2;
 }
-h1, h2, h3, h4, .card-title {
-    font-weight: 600;
+
+/* Формы */
+.form-control, .input-group-text {
+    border-radius: 1rem !important;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
 }
-.breadcrumb-area {
-    background: transparent;
-    margin-bottom: 1.5rem;
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
+
+/* Адаптивность */
 @media (max-width: 768px) {
-    .main-card {
-        border-radius: 1rem;
+    .main-card, .post-card, .sidebar .card {
+        border-radius: 1.25rem !important;
     }
+    .btn-primary {
+        padding: 0.5rem 1.2rem;
+    }
+}
+.dropdown-item {
+    color: #1e293b !important;
+}
+.dropdown-item:hover {
+    background-color: #f1f5f9;
+    color: #0f172a !important;
 }

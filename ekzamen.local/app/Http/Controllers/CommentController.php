@@ -29,4 +29,11 @@ class CommentController extends Controller
         // Возвращаем пользователя обратно на страницу поста с сообщением об успехе
         return back()->with('success', 'Комментарий добавлен!');
     }
+
+    public function destroy(Comment $comment)
+{
+    $this->authorize('delete', $comment);
+    $comment->delete();
+    return back()->with('success', 'Комментарий удалён.');
+}
 }

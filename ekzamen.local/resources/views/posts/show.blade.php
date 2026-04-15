@@ -26,6 +26,29 @@
             {!! nl2br(e($post->content)) !!}
         </div>
     </article>
+    @auth
+    <div class="mt-4 d-flex gap-2">
+        @can('update', $post)
+            <a href="{{ route('posts.edit', $post->post_id) }}" class="btn btn-warning">Редактировать</a>
+        @endcan
+        @can('delete', $post)
+            <form action="{{ route('posts.destroy', $post->post_id) }}" method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Удалить пост?')">Удалить</button>
+            </form>
+        @endcan
+        @can('approve', $post)
+            @if(!$post->is_approved)
+                <form action="{{ route('posts.approve', $post->post_id) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-success">Одобрить пост</button>
+                </form>
+            @endif
+        @endcan
+    </div>
+@endauth
 
     {{-- БЛОК КОММЕНТАРИЕВ --}}
     <section class="comments-section mt-5">
