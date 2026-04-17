@@ -23,14 +23,16 @@ class User extends Authenticatable
     // ... другие поля
 
     public function isSuperAdmin()
-    {
-        return $this->role === self::ROLE_SUPER_ADMIN;
-    }
+   // app/Models/User.php
 
-    public function isAdmin()
-    {
-        return $this->role === self::ROLE_ADMIN;
-    }
+{
+    return $this->role === 'super_admin';
+}
+
+public function isAdmin()
+{
+    return $this->role === 'admin';
+}
 
     public function isUser()
     {
@@ -41,5 +43,17 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
+    public function posts()
+{
+    return $this->hasMany(Post::class, 'user_id');
+}
     
+// app/Models/User.php
+protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'role', // <-- обязательно
+];
+
 }

@@ -18,7 +18,7 @@
                 <ul class="navbar-nav ms-auto">
                     @guest
                     @auth
-    <li class="nav-item"><a class="nav-link" href="{{ route('posts.create') }}">Новый пост</a></li>
+      
     <!-- остальные пункты -->
 @endauth
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Войти</a></li>
@@ -33,6 +33,10 @@
      @auth
     @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
         <li class="nav-item"><a class="nav-link" href="{{ route('admin.index') }}" style="color: #8b5cf6 !important;">Админка</a></li>
+         
+    @endif
+    @auth
+    <li class="nav-item"><a class="nav-link" href="{{ route('posts.create') }}" style="color: #8b5cf6 !important;">Новый пост</a></li>
     @endif
     <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}" style="color: #8b5cf6 !important;">Профиль</a></li>
     <li class="nav-item">

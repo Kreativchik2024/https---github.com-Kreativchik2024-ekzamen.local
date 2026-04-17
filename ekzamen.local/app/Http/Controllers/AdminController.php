@@ -13,13 +13,16 @@ class AdminController extends Controller
         return view('admin.index', compact('users'));
     }
 
-    public function updateRole(Request $request, User $user)
-    {
-        $request->validate([
-            'role' => 'required|in:super_admin,admin,user'
-        ]);
+public function updateRole(Request $request, User $user)
 
-        $user->update(['role' => $request->role]);
-        return back()->with('success', 'Роль обновлена.');
-    }
+{
+    $request->validate([
+        'role' => 'required|in:super_admin,admin,user'
+    ]);
+
+    $user->update(['role' => $request->role]);
+
+    // Возврат на предыдущую страницу (с сохранением GET-параметров, например ?page=2)
+    return redirect()->back()->with('success', 'Роль обновлена.');
+}
 }

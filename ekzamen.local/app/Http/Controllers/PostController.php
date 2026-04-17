@@ -51,6 +51,7 @@ class PostController extends Controller
             'views' => 0,
             'is_published' => false,
             'published_at' => null,
+            'status' => Post::STATUS_PENDING, // добавлено
         ]);
         
         return redirect()->route('posts.show', $post->post_id)
@@ -59,15 +60,19 @@ class PostController extends Controller
     
     public function show(Post $post)
     {
-        if (!$post->is_approved && !(auth()->check() && (auth()->user()->isSuperAdmin() || auth()->user()->isAdmin()))) {
-            abort(404);
-        }
+        $user = auth()->user();
         
+        if (!$post->is_approved) {
+            if (!$user || !($user->isSuperAdmin() || $user->isAdmin() || $user->id === $post->user_id)) {
+                abort(404);
+            }
+        }
+
         $post->load(['comments' => function ($query) {
             $query->with('user', 'replies.user')->latest();
         }]);
-        $recentPosts = Post::latest()->take(5)->get();
-        
+        $recentPosts = Post::where('is_approved', true)->latest()->take(5)->get();
+
         return view('posts.show', compact('post', 'recentPosts'));
     }
     
@@ -102,7 +107,7 @@ class PostController extends Controller
     {
         $this->authorize('delete', $post);
         $post->delete();
-        return redirect()->route('home')->with('success', 'Пост удалён.');
+         return back()->with('success', 'Пост удалён.');
     }
     
     public function approve(Post $post)
@@ -112,7 +117,33 @@ class PostController extends Controller
             'is_approved' => true,
             'is_published' => true,
             'published_at' => now(),
+            'status' => Post::STATUS_APPROVED,
         ]);
         return back()->with('success', 'Пост одобрен и опубликован.');
     }
+    
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->findOrFail($id);
+        $this->authorize('delete', $post);
+        $post->restore();
+        // Восстанавливаем статус на "на модерации"
+        $post->update([
+            'is_approved' => false,
+            'is_published' => false,
+            'status' => Post::STATUS_PENDING,
+        ]);
+        return back()->with('success', 'Пост восстановлен.');
+    }
+    public function reject(Post $post)
+{
+    $this->authorize('approve', $post); // те же права, что на одобрение
+    $post->update([
+        'is_approved' => false,
+        'is_published' => false,
+        'status' => Post::STATUS_REJECTED,
+    ]);
+    return back()->with('success', 'Пост отклонён.');
+}
+
 }
