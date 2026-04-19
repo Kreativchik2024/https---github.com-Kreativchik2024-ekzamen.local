@@ -1,0 +1,10 @@
+ECMhKXrB4bU6RQVZpi2DN6NCNZflWq0ZfAFayUddaKPvDVxkp7qe98bJMfmq
+
+
+https://api.sportmonks.com/v3/football/leagues/501?api_token=ECMhKXrB4bU6RQVZpi2DN6NCNZflWq0ZfAFayUddaKPvDVxkp7qe98bJMfmq
+
+
+BZZOIRO_API_TOKEN=7d107b249b8d39345d6bf9fa7561b385a999e02d
+
+
+https://sports.bzzoiro.com/api/events/?date_from=2023-04-18&date_to=2023-04-20&limit=5&has_odds=true

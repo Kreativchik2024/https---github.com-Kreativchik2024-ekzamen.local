@@ -9,6 +9,28 @@
         <div class="d-flex justify-content-between text-muted mb-3">
             <div>
                 <i class="bi bi-person-circle"></i> {{ $post->user->name ?? 'Автор не указан' }}
+                @auth
+                    @if(Auth::id() !== $post->user->id)
+                        <span class="ms-2">
+                            <form action="{{ route('authors.like', $post->user) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm {{ $post->user->likedByCurrentUser() ? 'btn-primary' : 'btn-outline-primary' }} p-0 px-1">
+                                    👍 {{ $post->user->likes_count ?? 0 }}
+                                </button>
+                            </form>
+                            <form action="{{ route('authors.dislike', $post->user) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm {{ $post->user->dislikedByCurrentUser() ? 'btn-danger' : 'btn-outline-danger' }} p-0 px-1 ms-1">
+                                    👎 {{ $post->user->dislikes_count ?? 0 }}
+                                </button>
+                            </form>
+                        </span>
+                    @else
+                        <span class="ms-2 text-muted">👍 {{ $post->user->likes_count ?? 0 }} 👎 {{ $post->user->dislikes_count ?? 0 }}</span>
+                    @endif
+                @else
+                    <span class="ms-2">👍 {{ $post->user->likes_count ?? 0 }} 👎 {{ $post->user->dislikes_count ?? 0 }}</span>
+                @endauth
             </div>
             <div>
                 <i class="bi bi-calendar3"></i> {{ $post->created_at->format('d.m.Y H:i') }}
@@ -48,7 +70,7 @@
             @endif
         @endcan
     </div>
-@endauth
+    @endauth
 
     {{-- БЛОК КОММЕНТАРИЕВ --}}
     <section class="comments-section mt-5">

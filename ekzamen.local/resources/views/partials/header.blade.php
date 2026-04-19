@@ -5,7 +5,7 @@
         <div class="container">
             <!-- Логотип -->
             <a class="navbar-brand fw-bold fs-3" href="{{ route('home') }}">
-                <i class="bi bi-journal-bookmark-fill me-2"></i>PV315
+                <i class="bi bi-journal-bookmark-fill me-2"></i>Экзамен по Laravel
             </a>
 
             <!-- Кнопка для мобильных -->

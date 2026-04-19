@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\Like;
 
 class PostController extends Controller
 {
@@ -26,55 +27,59 @@ class PostController extends Controller
         return view('posts.index', compact('posts', 'recentPosts'));
     }
     
-    public function create()
-    {
-        $this->authorize('create', Post::class);
-        return view('posts.create');
-    }
+    // public function create()
+    // {
+    //     $this->authorize('create', Post::class);
+    //     return view('posts.create');
+    // }
     
-    public function store(Request $request)
-    {
-        $this->authorize('create', Post::class);
+    // public function store(Request $request)
+    // {
+    //     $this->authorize('create', Post::class);
         
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'nullable|max:255',
-            'content' => 'required',
-        ]);
+    //     $validated = $request->validate([
+    //         'title' => 'required|max:255',
+    //         'description' => 'nullable|max:255',
+    //         'content' => 'required',
+    //     ]);
         
-        $post = auth()->user()->posts()->create([
-            'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
-            'description' => $validated['description'] ?? '',
-            'content' => $validated['content'],
-            'is_approved' => false,
-            'views' => 0,
-            'is_published' => false,
-            'published_at' => null,
-            'status' => Post::STATUS_PENDING, // добавлено
-        ]);
+    //     $post = auth()->user()->posts()->create([
+    //         'title' => $validated['title'],
+    //         'slug' => Str::slug($validated['title']),
+    //         'description' => $validated['description'] ?? '',
+    //         'content' => $validated['content'],
+    //         'is_approved' => false,
+    //         'views' => 0,
+    //         'is_published' => false,
+    //         'published_at' => null,
+    //         'status' => Post::STATUS_PENDING, // добавлено
+    //     ]);
         
-        return redirect()->route('posts.show', $post->post_id)
-            ->with('success', 'Пост создан и отправлен на модерацию.');
-    }
+    //     return redirect()->route('posts.show', $post->post_id)
+    //         ->with('success', 'Пост создан и отправлен на модерацию.');
+    // }
     
-    public function show(Post $post)
-    {
-        $user = auth()->user();
-        
-        if (!$post->is_approved) {
-            if (!$user || !($user->isSuperAdmin() || $user->isAdmin() || $user->id === $post->user_id)) {
-                abort(404);
-            }
+   public function show(Post $post)
+{
+    $user = auth()->user();
+    $post->loadCount('comments');
+    
+    if (!$post->is_approved) {
+        if (!$user || !($user->isSuperAdmin() || $user->isAdmin() || $user->id === $post->user_id)) {
+            abort(404);
         }
-
-        $post->load(['comments' => function ($query) {
-            $query->with('user', 'replies.user')->latest();
-        }]);
-        $recentPosts = Post::where('is_approved', true)->latest()->take(5)->get();
-
-        return view('posts.show', compact('post', 'recentPosts'));
     }
+
+    // Увеличиваем счётчик просмотров
+    $post->increment('views');
+
+    $post->load(['comments' => function ($query) {
+        $query->with('user', 'replies.user')->latest();
+    }]);
+    $recentPosts = Post::where('is_approved', true)->latest()->take(5)->get();
+
+    return view('posts.show', compact('post', 'recentPosts'));
+}
     
     public function edit(Post $post)
     {
@@ -146,4 +151,51 @@ class PostController extends Controller
     return back()->with('success', 'Пост отклонён.');
 }
 
+public function like(Post $post)
+{
+    $userId = auth()->id();
+    $existing = Like::where('user_id', $userId)
+                    ->where('post_id', $post->post_id)
+                    ->first();
+
+    if ($existing) {
+        if ($existing->type === 'like') {
+            $existing->delete();
+        } else {
+            $existing->update(['type' => 'like']);
+        }
+    } else {
+        Like::create([
+            'user_id' => $userId,
+            'post_id' => $post->post_id,
+            'type' => 'like'
+        ]);
+    }
+
+    return back();
+}
+
+public function dislike(Post $post)
+{
+    $userId = auth()->id();
+    $existing = Like::where('user_id', $userId)
+                    ->where('post_id', $post->post_id)
+                    ->first();
+
+    if ($existing) {
+        if ($existing->type === 'dislike') {
+            $existing->delete();
+        } else {
+            $existing->update(['type' => 'dislike']);
+        }
+    } else {
+        Like::create([
+            'user_id' => $userId,
+            'post_id' => $post->post_id,
+            'type' => 'dislike'
+        ]);
+    }
+
+    return back();
+}
 }
